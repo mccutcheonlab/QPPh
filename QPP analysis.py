@@ -232,6 +232,9 @@ def PrefCalc(Quin_free):
 metafile="C:\\Users\\fabie\\Documents\\QPP data\\QPPh1_metafile_pref.txt" #metafile with only preference tests
 medfolder="C:\\Users\\fabie\\Documents\\QPP data\\Behaviour\\"
 
+metafile="C:\\Users\\James Rig\\Documents\\GitHub\\QPPh\\QPPh1_metafile_pref.txt" #metafile with only preference tests
+medfolder="C:\\Raw Data Files\\QPPh\\QPPh_medfiles\\"
+
 ## Extraction licks ('b' = licks left; 'e'= licks right) from medfile
 Data = Extract(metafile)
 Licksallrats = []
@@ -283,7 +286,32 @@ for index, session in enumerate(RLicks): #separate forced and free trials on rig
                 Temp_licks2.append(lick)
         RLicks_forced.append(Temp_licks)
         RLicks_free.append(Temp_licks2)
+
+"""
+A couple of suggestions for the code above - not that it needs it because it
+ works great - but just as ideas and an intro to other ways of doing things.
  
+ 1) there is a variable in the medfile ('r') that tells you what the trial type
+    is so you could potentially select free choice trials as their trial type is
+    '2' whereas left and right are '0' and '1'. Potentially you could use this to
+    get your cut off time - not a massive improvement but would be useful if the
+    number of forced choice trials differed between sessions
+    
+ 2) for the if statements used to cycle through the licks and work out whether
+    they are before or after the cutoff you could consider using list comprehensions.
+    It took me a while to get my head round them but after I did they became one
+    my my favourite and most useful things in Python. In this case you could have
+    
+    Temp_licks = [x for x in lick if lick < End_forced]
+    LLicks_forced.append(Temp_licks)
+    
+    or even...
+    
+    LLicks_forced.append([x for x in lick if lick < End_forced])
+    
+As I say, it doesn't necessarily save you that much time but sometimes these
+comprehensions can be really useful and a neat way of doing stuff.
+"""
     
 """
 Date of Preference tests with quinine.
@@ -341,7 +369,19 @@ Quin_free.append(ListsMaker('19/11/2018', LLicks_free, RLicks_free))
 Quin_free.append(ListsMaker('20/11/2018', LLicks_free, RLicks_free))
 Quin_free.append(ListsMaker('21/11/2018', LLicks_free, RLicks_free))
 
+"""
+In the section above you could simplify the code by defining the list of dates
+first as it is the same for each list you're making and then use simple for-loops
+for each one, e.g.
 
+dates = ['05/11/2018', '06/11/2018', '07/11/2018' etc]
+Quin_all = []
+for date in dates:
+    Quin_all.append(ListsMaker(date, LLicks, RLicks))
+    
+and repeat for Quin_forced and Quin_free
+
+"""
 
 ##Calculate casein preference for each rat for a each quinine concentration test\
 #based on licks during free choice trials
